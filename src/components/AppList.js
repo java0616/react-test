@@ -7,32 +7,38 @@ import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchFeed } from '../actions/feedActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
+  export class AppList extends Component {
+    state = {
+      items: [],
+      hasMore: true
+    };
 
-export class AppList extends Component {
-  state = {
-    items: [],
-    hasMore: true
-  };
-  constructor() {
-    super();
-      this.hasMore = true;
-      this.items  = [];
+    constructor() {
+      super();
+       this.hasMore = true;
+       this.items  = [];
+    }
+
+    componentWillMount(){
+      this.props.fetchFeed();
+    }
+
+     componentDidMount(){
+     AOS.init({
+        duration : 2000
+     })
+    }
+
+    componentWillReceiveProps(nextProps){
+
   }
 
-
-
-  componentWillMount(){
-    this.props.fetchFeed();
-  }
-
-  componentWillReceiveProps(nextProps){
-
-  }
-
-     fetchMoreData = () => {
-      if(this.props.items){
+  fetchMoreData = () => {
+    if(this.props.items){
     if (this.state.items.length >= 100) {
       this.setState({ hasMore: false });
       return;
@@ -63,7 +69,7 @@ export class AppList extends Component {
 
    if(this.props.items.length > 0){
     feedList = this.props.items.map( (feed,index) =>(
-      <div key={feed.id.attributes['im:id']}>
+      <div key={feed.id.attributes['im:id']} data-aos='fade-up' data-aos-duration={(index+1) * 100}>
         <ListItem>
         <div className="app-id" >{index+1}</div>
         <img alt={feed['im:name'].label} className={( (index+1) % 2 ? 'odd' : 'even')} src={feed['im:image'][0].label} />

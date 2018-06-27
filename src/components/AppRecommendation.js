@@ -3,6 +3,9 @@ import Slider from "react-slick";
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchRecommendation } from '../actions/feedActions';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 export class AppRecommendation extends Component {
 
@@ -28,7 +31,7 @@ export class AppRecommendation extends Component {
  var feedItemsResult;
  if(this.props.items.length > 0){
   feedItemsResult = this.props.items.map( (feed,index) =>(
-    <div key={feed.id.attributes['im:id']}>
+    <div key={feed.id.attributes['im:id']} data-aos='fade-left' data-aos-duration={(index+1) * 100}>
     <div className="col-12" ><img className="app-icon" alt={ feed['im:name'].label} src={feed['im:image'][2].label} /></div>
     <div className="col-12" ><p className="title" >{ feed['im:name'].label}</p></div>
     <div className="col-12" ><p>{ feed.category.attributes.label }</p></div>
